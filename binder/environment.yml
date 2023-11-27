@@ -1,12 +1,19 @@
-name: eddy-flux
+name: eddy-footprint
 channels:
   - conda-forge
   - nodefaults
 dependencies:
   # Required dependencies
   - python=3.10
-  - xarray
+  - cartopy
+  - gdal
+  - jupyter
+  - matplotlib
+  - mpmath
   - numpy
   - pre-commit
   - pytest
   - pytest-cov
+  - rasterio
+  - rioxarray
+  - xarray
