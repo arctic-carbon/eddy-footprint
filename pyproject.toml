@@ -26,9 +26,9 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-    "mpmath",
     "numpy",
     "xarray",
+    "scipy",
 ]
 [project.optional-dependencies]
 dev = [

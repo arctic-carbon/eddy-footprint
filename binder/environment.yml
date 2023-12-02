@@ -16,4 +16,5 @@ dependencies:
   - pytest-cov
   - rasterio
   - rioxarray
+  - scipy
   - xarray
