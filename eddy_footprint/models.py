@@ -16,6 +16,7 @@ class FootprintModel(ABC):
         roughness_length: int,
         domain_length: int,
         resolution: int,
+        workers: int,
     ):
         self.ds = ds
         self.instrument_height = instrument_height
@@ -40,6 +41,7 @@ class FootprintModel(ABC):
                 template_xx=template_xx,
                 template_x=template_x,
                 template_y=template_y,
+                workers=workers,
             )
             timestep_ds = timestep_ds.expand_dims(dim={"time": [timestep.values]})
             datasets.append(timestep_ds)
@@ -70,6 +72,7 @@ class HsiehFootprintModel(FootprintModel):
         roughness_length: int,
         domain_length: int,
         resolution: int,
+        workers: int,
     ):
         super().__init__(
             data,
@@ -77,6 +80,7 @@ class HsiehFootprintModel(FootprintModel):
             roughness_length=roughness_length,
             domain_length=domain_length,
             resolution=resolution,
+            workers=workers,
         )
 
     def calc_parameters(self):
@@ -129,6 +133,7 @@ class KormannMeixnerFootprintModel(FootprintModel):
         roughness_length: int,
         domain_length: int,
         resolution: int,
+        workers: int,
     ):
         super().__init__(
             data,
@@ -136,6 +141,7 @@ class KormannMeixnerFootprintModel(FootprintModel):
             roughness_length=roughness_length,
             domain_length=domain_length,
             resolution=resolution,
+            workers=workers,
         )
 
     def calc_parameters(self):

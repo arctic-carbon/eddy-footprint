@@ -35,10 +35,10 @@ def build_domain(*, domain_length: int, resolution: int, time: np.ndarray):
     return da
 
 
-def resample(da, *, query_points, output_shape):
+def resample(da, *, query_points, output_shape, workers):
     points = np.array((da.x.data.flatten(), da.y.data.flatten())).transpose()
     tree = KDTree(points)
-    d, ind = tree.query(query_points, k=4, workers=-1)
+    d, ind = tree.query(query_points, k=4, workers=workers)
     w = 1.0 / d**2
     output_points = np.sum(w * da.data.flatten()[ind], axis=1) / np.sum(w, axis=1)
     output_points.shape = output_shape
@@ -46,12 +46,12 @@ def resample(da, *, query_points, output_shape):
 
 
 def normalize_domain(
-    da, *, wind_direction, query_points, template_xx, template_x, template_y
+    da, *, wind_direction, query_points, template_xx, template_x, template_y, workers
 ):
     da = rotate_domain(da, wind_direction=wind_direction)
     da = da.transpose("x", "y")
     output_points = resample(
-        da, query_points=query_points, output_shape=template_xx.shape
+        da, query_points=query_points, output_shape=template_xx.shape, workers=workers
     )
     output_ds = xr.DataArray(data=output_points, dims=("x", "y"))
     output_ds = output_ds.assign_coords(x=template_x)

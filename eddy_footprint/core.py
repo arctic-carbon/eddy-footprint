@@ -2,6 +2,7 @@ from typing import Literal
 import xarray as xr
 import numpy as np
 from eddy_footprint.models import HsiehFootprintModel, KormannMeixnerFootprintModel
+from typing import Optional
 
 
 def calc_footprint(
@@ -16,10 +17,35 @@ def calc_footprint(
     time: np.ndarray,
     instrument_height: float,
     roughness_length: float,
-    domain_length: int = 1000,
-    resolution: int = 1,
-    method: Literal["Hsieh", "Kormann & Meixner"] = "Hsieh",
+    domain_length: Optional[int] = 1000,
+    resolution: Optional[int] = 5,
+    workers: Optional[int] = 1,
+    method: Optional[Literal["Hsieh", "Kormann & Meixner"]] = "Hsieh",
 ) -> xr.Dataset:
+    """Create a dataset with footprint influences from flux tower measurements.
+
+    .. warning::
+        This function is experimental and its signature may change.
+
+    Parameters
+    ----------
+    air_pressure : np.ndarray
+        Array with measurement of air pressure in units.
+    air_temperature : np.ndarray
+    friction_velocity : np.ndarray
+    instrument_height : float
+    roughness_length : float
+    domain_length : int, optional
+    resolution : int, optional
+    workers : int, optional
+        Number of workers to use for parallel processing during interpolation step.
+        If -1 is given all CPU threads are used. Default: 1.
+
+    Returns
+    -------
+    ds: xarray.Dataset
+        Dataset with footprints of influence.
+    """
     ds = xr.Dataset()
     ds["air_pressure"] = xr.DataArray(
         data=air_pressure, dims=["time"], coords=dict(time=time)
@@ -50,6 +76,7 @@ def calc_footprint(
             roughness_length=roughness_length,
             domain_length=domain_length,
             resolution=resolution,
+            workers=workers,
         )
     elif method == "Kormann & Meixner":
         model = KormannMeixnerFootprintModel(
@@ -58,6 +85,7 @@ def calc_footprint(
             roughness_length=roughness_length,
             domain_length=domain_length,
             resolution=resolution,
+            workers=workers,
         )
 
     return model.footprints
