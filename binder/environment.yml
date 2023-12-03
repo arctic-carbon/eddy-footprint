@@ -12,7 +12,6 @@ dependencies:
   - mpmath
   - numpy
   - pre-commit
-  - pykdtree
   - pytest
   - pytest-cov
   - rasterio

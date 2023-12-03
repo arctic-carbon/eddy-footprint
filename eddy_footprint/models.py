@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import xarray as xr
 import numpy as np
 from scipy.special import gamma
-from pykdtree.kdtree import KDTree
+from eddy_footprint.spatial import build_domain, build_template, normalize_domain
 
 
 class FootprintModel(ABC):
@@ -20,23 +20,26 @@ class FootprintModel(ABC):
         self.ds = ds
         self.instrument_height = instrument_height
         self.roughness_length = roughness_length
-        self.build_domain(
-            domain_length=domain_length,
-            resolution=resolution,
+        self.domain = build_domain(
+            domain_length=domain_length, resolution=resolution, time=self.ds.time.data
         )
         self.calc_parameters()
         self.calc_Fx()
         self.calc_Dxy()
         self.calc_Fxy()
-        self.build_template(
+        query_points, template_xx, _, template_x, template_y = build_template(
             domain_length=domain_length,
             resolution=resolution,
         )
         datasets = []
         for timestep in self.ds.time:
-            timestep_ds = self.normalize_domain(
+            timestep_ds = normalize_domain(
                 self.ds["Fxy"].sel(time=timestep),
                 wind_direction=ds["wind_direction"].sel(time=timestep).data,
+                query_points=query_points,
+                template_xx=template_xx,
+                template_x=template_x,
+                template_y=template_y,
             )
             timestep_ds = timestep_ds.expand_dims(dim={"time": [timestep.values]})
             datasets.append(timestep_ds)
@@ -56,64 +59,6 @@ class FootprintModel(ABC):
 
     def calc_Fxy(self):
         self.ds["Fxy"] = self.Fx * self.Dxy
-
-    def rotate_domain(self, da, wind_direction):
-        rot = wind_direction - 90
-        x = da.xx.data * np.cos(rot) + da.yy.data * np.sin(rot)
-        y = -da.xx.data * np.sin(rot) + da.yy.data * np.cos(rot)
-        da = da.assign_coords(x=(("y", "x"), x))
-        da = da.assign_coords(y=(("y", "x"), y))
-        da = da.drop_vars(["xx", "yy"])
-        return da
-
-    def build_domain(self, *, domain_length: int, resolution: int):
-        x = np.linspace(1, domain_length, int(domain_length / resolution))
-        y = np.linspace(
-            -domain_length / 2, domain_length / 2, int(domain_length / resolution)
-        )
-        xx, yy = np.meshgrid(x, y)
-        data = np.zeros(
-            (
-                int(domain_length / resolution),
-                int(domain_length / resolution),
-                len(self.ds.time),
-            )
-        )
-        da = xr.DataArray(data, dims=("x", "y", "time"))
-        da = da.assign_coords(x=(("x"), x))
-        da = da.assign_coords(y=(("y"), y))
-        da = da.assign_coords(time=(("time"), self.ds.time.data))
-        da = da.assign_coords(xx=(("y", "x"), xx))
-        da = da.assign_coords(yy=(("y", "x"), yy))
-        self.domain = da
-
-    def normalize_domain(self, da, wind_direction):
-        da = self.rotate_domain(da, wind_direction=wind_direction)
-        da = da.transpose("x", "y")
-        points = np.array((da.x.data.flatten(), da.y.data.flatten())).transpose()
-        tree = KDTree(points)
-        d, ind = tree.query(self.query_points, k=4)
-        w = 1.0 / d**2
-        output_points = np.sum(w * da.data.flatten()[ind], axis=1) / np.sum(w, axis=1)
-        output_points.shape = self.template_xx.shape
-        output_ds = xr.DataArray(data=output_points, dims=("x", "y"))
-        output_ds = output_ds.assign_coords(x=self.template_x)
-        output_ds = output_ds.assign_coords(y=self.template_y)
-        return output_ds
-
-    def build_template(self, domain_length, resolution):
-        self.template_x = np.linspace(
-            -domain_length, domain_length, int(domain_length / resolution) * 2
-        )
-        self.template_y = np.linspace(
-            -domain_length, domain_length, int(domain_length / resolution) * 2
-        )
-        self.template_xx, self.template_yy = np.meshgrid(
-            self.template_x, self.template_y, indexing="xy"
-        )
-        self.query_points = np.array(
-            (self.template_xx.flatten(), self.template_yy.flatten())
-        ).transpose()
 
 
 class HsiehFootprintModel(FootprintModel):
