@@ -13,7 +13,7 @@ def calc_footprint(
     wind_speed: np.ndarray,
     cross_wind_variance: np.ndarray,
     wind_direction: np.ndarray,
-    monin_obukov_length: np.ndarray,
+    monin_obukhov_length: np.ndarray,
     time: np.ndarray,
     instrument_height: float,
     roughness_length: float,
@@ -22,7 +22,7 @@ def calc_footprint(
     workers: Optional[int] = 1,
     method: Optional[Literal["Hsieh", "Kormann & Meixner"]] = "Hsieh",
 ) -> xr.DataArray:
-    """Create a dataset with footprint influences from eddy covariance flux measurements.
+    """Create a dataset with footprint influences from eddy covariance measurements.
 
     .. warning::
         This function is experimental and its signature may change.
@@ -44,23 +44,28 @@ def calc_footprint(
     monin_obukhov_length : np.ndarray
         Array with Monin-Obukhov length in meters.
     time : np.ndarray
-        Array with time, which can be a datetime object, filename, or other unique identifier for the timeseries that will serve as the third dimension.
-        Time need not be continuous or regular, but cannot have duplicates.
+        Array with time, a datetime object, filename, or other unique identifier.
+        time will serve as the third dimension.
+        time need not be continuous or regular, but cannot have duplicates.
     instrument_height : float
-        Constant for the instrument (sonic anemometer) height in meters above ground level.
+        Constant for the instrument (sonic anemometer) height in meters above ground.
     roughness_length : float
         Constant for the site roughness length (z_not) in meters.
     domain_length : int, optional
-        Integer for the domain length in meters, the extent in downwind and crosswind directions used to define footprint calculations.
-        The x and y dimensions of the output xarray are twice the domain length, with the eddy covaiance tower located at (0,0).
+        Integer for the domain length in meters.
+        The extent in downwind and crosswind directions used in footprint calculations.
+        The x and y dimensions of the output xarray are twice the domain length,
+        with the eddy covaiance tower located at (0,0).
         Default: 1000.
     resolution : int, optional
-        Integer for the resolution in meters used in the footprint calculations and x and y dimensions. Default: 5.
+        Integer for the resolution in meters used in the footprint calculations
+        and x and y dimensions. Default: 5.
     workers : int, optional
         Number of workers to use for parallel processing during interpolation step.
         If -1 is given all CPU threads are used. Default: 1.
     method : ``Hsieh`` or ``Kormann & Meixner``, optional
-        The footprint model method to use, either Hsieh or Kormann & Meixner. Default: Hsieh.
+        The footprint model method to use, either Hsieh or Kormann & Meixner.
+        Default: Hsieh.
 
 
     Returns
