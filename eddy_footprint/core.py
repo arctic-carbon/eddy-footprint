@@ -13,7 +13,7 @@ def calc_footprint(
     wind_speed: np.ndarray,
     cross_wind_variance: np.ndarray,
     wind_direction: np.ndarray,
-    monin_obukov_lenth: np.ndarray,
+    monin_obukov_length: np.ndarray,
     time: np.ndarray,
     instrument_height: float,
     roughness_length: float,
@@ -87,8 +87,8 @@ def calc_footprint(
     ds["wind_direction"] = xr.DataArray(
         data=wind_direction, dims=["time"], coords=dict(time=time)
     )
-    ds["monin_obukhov_lenth"] = xr.DataArray(
-        data=monin_obukhov_lenth, dims=["time"], coords=dict(time=time)
+    ds["monin_obukhov_length"] = xr.DataArray(
+        data=monin_obukhov_length, dims=["time"], coords=dict(time=time)
     )
 
     if method == "Hsieh":
