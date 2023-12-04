@@ -4,7 +4,7 @@ channels:
   - nodefaults
 dependencies:
   # Required dependencies
-  - python=3.10
+  - python>=3.9
   - cartopy
   - gdal
   - jupyter
