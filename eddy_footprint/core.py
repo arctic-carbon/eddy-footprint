@@ -21,7 +21,7 @@ def calc_footprint(
     resolution: Optional[int] = 5,
     workers: Optional[int] = 1,
     method: Optional[Literal["Hsieh", "Kormann & Meixner"]] = "Hsieh",
-) -> xr.Dataset:
+) -> xr.DataArray:
     """Create a dataset with footprint influences from flux tower measurements.
 
     .. warning::
@@ -43,7 +43,7 @@ def calc_footprint(
 
     Returns
     -------
-    ds: xarray.DataArray
+    da: xarray.DataArray
         DataArray with footprints of influence.
     """
     ds = xr.Dataset()
