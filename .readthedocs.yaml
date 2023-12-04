@@ -11,9 +11,9 @@ build:
 
 # Build documentation in the doc/ directory with Sphinx
 sphinx:
-  configuration: doc/conf.py
+  configuration: doc/source/conf.py
   fail_on_warning: true
 
 # Optionally declare the Python requirements required to build your docs
 conda:
-  environment: ci/requirements/doc.yml
+  environment: ci/doc.yml

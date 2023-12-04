@@ -49,9 +49,6 @@ source_suffix = ".rst"
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
 
-# Generate the API documentation when building
-autosummary_generate = True
-
 # The encoding of source files.
 # source_encoding = 'utf-8-sig'
 
