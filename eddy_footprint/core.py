@@ -43,8 +43,8 @@ def calc_footprint(
 
     Returns
     -------
-    ds: xarray.Dataset
-        Dataset with footprints of influence.
+    ds: xarray.DataArray
+        DataArray with footprints of influence.
     """
     ds = xr.Dataset()
     ds["air_pressure"] = xr.DataArray(
