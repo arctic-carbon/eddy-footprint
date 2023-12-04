@@ -60,7 +60,7 @@ def calc_footprint(
         Number of workers to use for parallel processing during interpolation step.
         If -1 is given all CPU threads are used. Default: 1.
     method : ``Hsieh`` or ``Kormann & Meixner``, optional
-        The footprint model method, either Hsieh or Kormann & Meixner. Default: Hsieh.
+        The footprint model method to use, either Hsieh or Kormann & Meixner. Default: Hsieh.
 
 
     Returns
@@ -87,8 +87,8 @@ def calc_footprint(
     ds["wind_direction"] = xr.DataArray(
         data=wind_direction, dims=["time"], coords=dict(time=time)
     )
-    ds["monin_obukov_lenth"] = xr.DataArray(
-        data=monin_obukov_lenth, dims=["time"], coords=dict(time=time)
+    ds["monin_obukhov_lenth"] = xr.DataArray(
+        data=monin_obukhov_lenth, dims=["time"], coords=dict(time=time)
     )
 
     if method == "Hsieh":
