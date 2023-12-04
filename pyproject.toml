@@ -1,0 +1,55 @@
+[build-system]
+requires = [
+    "setuptools>=64",
+    "setuptools-scm[toml]>=6.2"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eddy-footprint"
+description = "Footprint flux models for the interpretation of flux tower measurements"
+readme = "README.rst"
+license = {text = "MIT"}
+authors = [{name = "Eddy-footprint developers", email = "ludda.ludwig@columbia.edu"}]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+]
+dynamic = ["version"]
+dependencies = [
+    "numpy",
+    "xarray",
+    "scipy",
+]
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+]
+[project.urls]
+documentation = "https://eddy-footprint.readthedocs.io/en/latest/"
+repository = "https://github.com/arctic-carbon/eddy-footprint"
+
+[tool.setuptools.packages.find]
+include = ["eddy_footprint*"]
+
+[tool.setuptools_scm]
+local_scheme = "node-and-date"
+fallback_version = "999"
+
+[tool.isort]
+profile = "black"
+known_third_party = ["numpy", "pandas", "xarray"]
+
+[tool.pytest.ini_options]
+log_cli = true
+log_level = "INFO"
