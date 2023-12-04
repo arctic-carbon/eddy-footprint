@@ -22,7 +22,7 @@ def calc_footprint(
     workers: Optional[int] = 1,
     method: Optional[Literal["Hsieh", "Kormann & Meixner"]] = "Hsieh",
 ) -> xr.DataArray:
-    """Create a dataset with footprint influences from flux tower measurements.
+    """Create a dataset with footprint influences from eddy covariance flux measurements.
 
     .. warning::
         This function is experimental and its signature may change.
@@ -30,16 +30,38 @@ def calc_footprint(
     Parameters
     ----------
     air_pressure : np.ndarray
-        Array with measurement of air pressure in units.
+        Array with measurement of air pressure in units Pa.
     air_temperature : np.ndarray
+        Array with measurments of air temperature in degrees K.
     friction_velocity : np.ndarray
+        Array with measurements of friction veloicty (u*) in meters per second.
+    wind_speed : np.ndarray
+        Array with horizontal (u) wind velocity in meters per second.
+    cross_wind_variance : np.ndarray
+        Array with cross wind (v) variance in meters^2 per second^2.
+    wind_direction : np.ndarray
+        Array with down wind direction in degrees, where N/S is at 0/360 degrees.
+    monin_obukhov_length : np.ndarray
+        Array with Monin-Obukhov length in meters.
+    time : np.ndarray
+        Array with time, which can be a datetime object, filename, or other unique identifier for the timeseries that will serve as the third dimension.
+        Time need not be continuous or regular, but cannot have duplicates.
     instrument_height : float
+        Constant for the instrument (sonic anemometer) height in meters above ground level.
     roughness_length : float
+        Constant for the site roughness length (z_not) in meters.
     domain_length : int, optional
+        Integer for the domain length in meters, the extent in downwind and crosswind directions used to define footprint calculations.
+        The x and y dimensions of the output xarray are twice the domain length, with the eddy covaiance tower located at (0,0).
+        Default: 1000.
     resolution : int, optional
+        Integer for the resolution in meters used in the footprint calculations and x and y dimensions. Default: 5.
     workers : int, optional
         Number of workers to use for parallel processing during interpolation step.
         If -1 is given all CPU threads are used. Default: 1.
+    method : ``Hsieh`` or ``Kormann & Meixner``, optional
+        The footprint model method, either Hsieh or Kormann & Meixner. Default: Hsieh.
+
 
     Returns
     -------
