@@ -4,21 +4,24 @@ channels:
   - nodefaults
 dependencies:
   - python=3.10
+  - ipykernel
+  - ipython
+  - matplotlib
+  - nbsphinx
   - numpy
+  - numpydoc
   - pre-commit
   - pytest
   - pytest-cov
   - scipy
-  - xarray
   - sphinx>=4.2.0
   - sphinx-copybutton
+  - sphinx-design
   - sphinx-panels
   - sphinx-autosummary-accessors
   - sphinx-book-theme >= 0.0.38
-  - nbsphinx
   - sphinxcontrib-srclinks
-  - numpydoc
-  - ipython
+  - xarray
   - pip
   - pip:
       # relative to this file. Needs to be editable to be accepted.

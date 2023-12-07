@@ -9,3 +9,4 @@ A Python library for creating eddy covariance flux footprints using multiple ana
    :caption: For users
 
    API Reference <api>
+   Tutorials and Presentations <tutorials-and-presentations>

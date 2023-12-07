@@ -49,7 +49,7 @@ class FootprintModel(ABC):
 
     @abstractmethod
     def calc_parameters(self):
-        self.ds["zeta"] = self.instrument_height / self.ds["monin_obukov_lenth"]
+        self.ds["zeta"] = self.instrument_height / self.ds["monin_obukhov_length"]
 
     @abstractmethod
     def calc_Fx(self):
@@ -90,7 +90,7 @@ class HsiehFootprintModel(FootprintModel):
             - 1
             + self.roughness_length / self.instrument_height
         )
-        self.ds["zeta_H"] = self.ds["zu"] / self.ds["monin_obukov_lenth"]
+        self.ds["zeta_H"] = self.ds["zu"] / self.ds["monin_obukhov_length"]
         self.ds["D"] = xr.where(self.ds["zeta_H"] < -0.02, 0.28, 0.97)
         self.ds["D"] = xr.where(self.ds["zeta_H"] > 0.02, 2.44, self.ds["D"])
         self.ds["P"] = xr.where(self.ds["zeta_H"] < -0.02, 0.59, 1)
@@ -112,12 +112,12 @@ class HsiehFootprintModel(FootprintModel):
             (1 / (0.41 * 0.41 * self.domain.x * self.domain.x))
             * self.ds["D"]
             * (self.ds["zu"] ** self.ds["P"])
-            * (np.abs(self.ds["monin_obukov_lenth"]) ** (1 - self.ds["P"]))
+            * (np.abs(self.ds["monin_obukhov_length"]) ** (1 - self.ds["P"]))
             * np.exp(
                 (
                     -self.ds["D"]
                     * (self.ds["zu"] ** self.ds["P"])
-                    * (np.abs(self.ds["monin_obukov_lenth"]) ** (1 - self.ds["P"]))
+                    * (np.abs(self.ds["monin_obukhov_length"]) ** (1 - self.ds["P"]))
                 )
                 / (0.41 * 0.41 * self.domain.x)
             )
@@ -147,18 +147,18 @@ class KormannMeixnerFootprintModel(FootprintModel):
     def calc_parameters(self):
         super().calc_parameters()
         self.ds["phi_c"] = xr.where(
-            self.ds["monin_obukov_lenth"] > 0, 1 + 5 * self.ds["zeta"], 1
+            self.ds["monin_obukhov_length"] > 0, 1 + 5 * self.ds["zeta"], 1
         )
         self.ds["phi_c"] = xr.where(
-            self.ds["monin_obukov_lenth"] < 0,
+            self.ds["monin_obukhov_length"] < 0,
             (1 - 16 * self.ds["zeta"]) ** (-0.5),
             self.ds["phi_c"],
         )
         self.ds["phi_m"] = xr.where(
-            self.ds["monin_obukov_lenth"] > 0, 1 + 5 * self.ds["zeta"], 1
+            self.ds["monin_obukhov_length"] > 0, 1 + 5 * self.ds["zeta"], 1
         )
         self.ds["phi_m"] = xr.where(
-            self.ds["monin_obukov_lenth"] < 0,
+            self.ds["monin_obukhov_length"] < 0,
             (1 - 16 * self.ds["zeta"]) ** (-0.25),
             self.ds["phi_m"],
         )
@@ -168,10 +168,10 @@ class KormannMeixnerFootprintModel(FootprintModel):
             / (0.41 * self.ds["wind_speed"])
         )
         self.ds["n"] = xr.where(
-            self.ds["monin_obukov_lenth"] > 0, 1 / (1 + 5 * self.ds["zeta"]), 1
+            self.ds["monin_obukhov_length"] > 0, 1 / (1 + 5 * self.ds["zeta"]), 1
         )
         self.ds["n"] = xr.where(
-            self.ds["monin_obukov_lenth"] < 0,
+            self.ds["monin_obukhov_length"] < 0,
             (1 - 24 * self.ds["zeta"]) / (1 - 16 * self.ds["zeta"]),
             self.ds["n"],
         )
