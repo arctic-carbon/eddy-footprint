@@ -4,7 +4,7 @@ from scipy.spatial import KDTree
 
 
 def rotate_domain(da, *, wind_direction):
-    rot = wind_direction - 90
+    rot = -(wind_direction) * np.pi / 180
     x = da.xx.data * np.cos(rot) + da.yy.data * np.sin(rot)
     y = -da.xx.data * np.sin(rot) + da.yy.data * np.cos(rot)
     da = da.assign_coords(x=(("y", "x"), x))
