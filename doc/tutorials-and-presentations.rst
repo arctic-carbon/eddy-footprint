@@ -20,7 +20,7 @@ Tutorials
        :text-align: center
        :link: demo.html
 
-       .. image:: _images/demo_7_0.png
+       .. image:: https://eddy-footprint.readthedocs.io/en/latest/_images/demo_13_0.png
            :alt: Eddy-footprint demonstration
        +++
        Eddy-footprint demonstration
