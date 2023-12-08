@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "eddy-footprint"
 description = "Footprint flux models for the interpretation of flux tower measurements"
-readme = "README.rst"
+readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Eddy-footprint developers", email = "ludda.ludwig@columbia.edu"}]
 requires-python = ">=3.9"
