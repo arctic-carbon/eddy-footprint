@@ -14,7 +14,7 @@ def rotate_domain(da, *, wind_direction):
 
 
 def build_domain(*, domain_length: int, resolution: int, time: np.ndarray):
-    x = np.linspace(1, domain_length, int(domain_length / resolution))
+    x = np.linspace(0, domain_length, int(domain_length / resolution))
     y = np.linspace(
         -domain_length / 2, domain_length / 2, int(domain_length / resolution)
     )
