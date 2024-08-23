@@ -43,6 +43,7 @@ class FootprintModel(ABC):
                 template_y=template_y,
                 workers=workers,
             )
+            timestep_ds = timestep_ds.fillna(0)
             timestep_ds = timestep_ds.expand_dims(dim={"time": [timestep.values]})
             datasets.append(timestep_ds)
         self.footprints = xr.concat(datasets, dim="time")
