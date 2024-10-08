@@ -71,7 +71,8 @@ def build_template(*, domain_length, resolution):
     return query_points, template_xx, template_yy, template_x, template_y
 
 
-def sum_one(*, da):
+def sum_one(da):
     sum_da = da.sum(dim="x").sum(dim="y")
     output_ds = da / sum_da
     return output_ds
+
