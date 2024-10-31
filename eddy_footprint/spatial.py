@@ -74,7 +74,7 @@ def build_template(*, domain_length, resolution):
 def sum_one(da):
     sum_da = da.sum(dim="x").sum(dim="y")
     norm_ds = da / sum_da
-    cutoff = 0.01 * sum_da
+    cutoff = 0.1 * sum_da
     output_ds = norm_ds.where(norm_ds > cutoff)
     return output_ds
 
