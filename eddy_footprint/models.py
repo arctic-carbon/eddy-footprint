@@ -53,7 +53,7 @@ class FootprintModel(ABC):
             timestep_ds = sum_one(timestep_ds)
             datasets.append(timestep_ds)
         self.footprints = xr.concat(datasets, dim="time")
-
+# test
     @abstractmethod
     def calc_parameters(self):
         self.ds["zeta"] = self.instrument_height / self.ds["monin_obukhov_length"]
