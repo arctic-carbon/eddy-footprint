@@ -61,10 +61,10 @@ def normalize_domain(
 
 def build_template(*, domain_length, resolution):
     template_x = np.linspace(
-        -domain_length, domain_length, int(domain_length / resolution+1) * 2
+        -domain_length, domain_length, (int(domain_length / resolution) * 2+1)
     )
     template_y = np.linspace(
-        -domain_length, domain_length, int(domain_length / resolution+1) * 2
+        -domain_length, domain_length, (int(domain_length / resolution) * 2+1)
     )
     template_xx, template_yy = np.meshgrid(template_x, template_y, indexing="xy")
     query_points = np.array((template_xx.flatten(), template_yy.flatten())).transpose()
