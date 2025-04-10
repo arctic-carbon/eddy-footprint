@@ -14,9 +14,9 @@ def rotate_domain(da, *, wind_direction):
 
 
 def build_domain(*, domain_length: int, resolution: int, time: np.ndarray):
-    x = np.linspace(0, domain_length, int(domain_length / resolution))
+    x = np.linspace(0, domain_length, int(domain_length / resolution+1))
     y = np.linspace(
-        -domain_length / 2, domain_length / 2, int(domain_length / resolution)
+        -domain_length / 2, domain_length / 2, int(domain_length / resolution+1)
     )
     xx, yy = np.meshgrid(x, y)
     data = np.zeros(
@@ -61,10 +61,10 @@ def normalize_domain(
 
 def build_template(*, domain_length, resolution):
     template_x = np.linspace(
-        -domain_length, domain_length, int(domain_length / resolution) * 2
+        -domain_length, domain_length, int(domain_length / resolution+1) * 2
     )
     template_y = np.linspace(
-        -domain_length, domain_length, int(domain_length / resolution) * 2
+        -domain_length, domain_length, int(domain_length / resolution+1) * 2
     )
     template_xx, template_yy = np.meshgrid(template_x, template_y, indexing="xy")
     query_points = np.array((template_xx.flatten(), template_yy.flatten())).transpose()
