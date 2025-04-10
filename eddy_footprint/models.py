@@ -3,7 +3,12 @@ from abc import ABC, abstractmethod
 import xarray as xr
 import numpy as np
 from scipy.special import gamma
-from eddy_footprint.spatial import build_domain, build_template, normalize_domain
+from eddy_footprint.spatial import (
+    build_domain,
+    build_template,
+    normalize_domain,
+    sum_one,
+)
 
 
 class FootprintModel(ABC):
@@ -45,6 +50,7 @@ class FootprintModel(ABC):
             )
             timestep_ds = timestep_ds.fillna(0)
             timestep_ds = timestep_ds.expand_dims(dim={"time": [timestep.values]})
+            timestep_ds = sum_one(timestep_ds)
             datasets.append(timestep_ds)
         self.footprints = xr.concat(datasets, dim="time")
 

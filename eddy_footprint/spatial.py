@@ -69,3 +69,10 @@ def build_template(*, domain_length, resolution):
     template_xx, template_yy = np.meshgrid(template_x, template_y, indexing="xy")
     query_points = np.array((template_xx.flatten(), template_yy.flatten())).transpose()
     return query_points, template_xx, template_yy, template_x, template_y
+
+
+def sum_one(da):
+    sum_da = da.sum(dim="x").sum(dim="y")
+    output_ds = da / sum_da
+    return output_ds
+
